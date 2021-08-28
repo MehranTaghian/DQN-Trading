@@ -1,6 +1,6 @@
 from EncoderDecoderAgent.CNNAttn.Train import Train
 from DataLoader.DataLoader import YahooFinanceDataLoader
-from DataLoader.DataLSTMSequential import DataLSTMSequential
+from DataLoader.DataSequential import DataLSTMSequential
 import torch
 from torch.utils.tensorboard import SummaryWriter
 

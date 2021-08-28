@@ -8,7 +8,7 @@ from EncoderDecoderAgent.ReplayMemory import ReplayMemory, Transition
 
 from DataLoader.DataLoader import BitmexDataLoader
 from DataLoader.DataLoader import YahooFinanceDataLoader
-from DataLoader.DataLSTMSequential import DataLSTMSequential
+from DataLoader.DataSequential import DataLSTMSequential
 from itertools import count
 from tqdm import tqdm
 import math

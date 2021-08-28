@@ -1,5 +1,5 @@
 from DataLoader.DataLoader import YahooFinanceDataLoader
-from DataLoader.DataLSTMSequential import DataLSTMSequential
+from DataLoader.DataSequential import DataLSTMSequential
 from EncoderDecoderAgent.CNN2D.Train import Train
 from torch.utils.tensorboard import SummaryWriter
 import torch

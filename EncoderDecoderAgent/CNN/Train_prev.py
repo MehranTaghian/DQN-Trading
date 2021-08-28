@@ -260,7 +260,7 @@ class Train:
 
 from DataLoader.DataLoader import BitmexDataLoader
 from DataLoader.DataLoader import YahooFinanceDataLoader
-from DataLoader.DataLSTMSequential import DataLSTMSequential
+from DataLoader.DataSequential import DataLSTMSequential
 from DataLoader.DataSequencePrediction import DataSequencePrediction
 
 BATCH_SIZE = 10
