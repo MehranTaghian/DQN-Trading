@@ -14,8 +14,12 @@ The deep reinforcement learning algorithm used here is Deep Q-Learning.
 
 ## Requirements
 
-- python - 3.7
-- torch = 1.2.0
+Install pytorch using the following commands. This is for CUDA 11.1 and python 3.8:
+```bash
+pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html
+```
+
+- python - 3.8
 - pandas=0.25.1
 - numpy=1.17.2
 - matplotlib=3.1.2
@@ -57,7 +61,7 @@ have been predicted using an LSTM model to the RL agent. This idea is raw and ne
 Where ever we used encoder-decoder architecture, the decoder is the DQN agent whose neural network is the same across
 all the models.
 
-[comment]: <> (TODO: double check the data loaders.)
+TODO: double check the data loaders.
 
 The `DeepRLAgent` directory contains the DQN model without encoder part (`VanillaInput`) whose data loader corresponds
 to `DataAutoPatternExtractionAgent.py`; an encoder-decoder model where the encoder is a 1d convolutional layer added to
@@ -75,6 +79,24 @@ All of these models use `DataSequential.py` file as environment.
 
 For running each agent, please refer to the `Main.py` file for instructions on how to run each agent
 and feed data. The `Main.py` file also has code for plotting results.
+
+The `Objects` directory contains the saved models from our experiments for each agent. 
+
+The `PatternDetectionCandleStick` directory contains `Evaluation.py` file which has all the evaluation metrics 
+used in the paper. This file receives the actions from the agents and evaluate the result of the strategy offered
+by each agent. The `LabelPatterns.py` uses rule-based methods to generate buy or sell signals. Also `Extract.py` 
+is another file used for detecting wellknown candlestick patterns.
+
+`RLAgent` directory is the implementation of the traditional RL algorithm SARSA-&#955; using cython. In order to run
+that in the `Main.ipynb` you should first build the  cython file. In order to do that, run the following script
+inside it's directory in terminal:
+```bash
+python setup.py build_ext --inplace
+```
+This works for both linux and windows.
+
+
+TODO:Building the RL Agent
 
 
 ## References

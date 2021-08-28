@@ -18,8 +18,8 @@ class BitmexDataLoader:
     def __init__(self, load_from_file=False):
         warnings.filterwarnings('ignore')
 
-        self.DATA_PATH = os.path.join(Path(os.path.abspath(os.path.dirname(__file__))).parent, 'Data\\Bitmex') + '\\'
-        self.OBJECT_PATH = os.path.join(Path(os.path.abspath(os.path.dirname(__file__))).parent, 'Objects') + '\\'
+        self.DATA_PATH = os.path.join(Path(os.path.abspath(os.path.dirname(__file__))).parent, 'Data/Bitmex') + '/'
+        self.OBJECT_PATH = os.path.join(Path(os.path.abspath(os.path.dirname(__file__))).parent, 'Objects') + '/'
 
         self.DATA_FILE = 'XBTUSD-5m-data.csv'
 
@@ -88,8 +88,8 @@ class YahooFinanceDataLoader:
         warnings.filterwarnings('ignore')
         self.DATA_NAME = dataset_folder
         self.DATA_PATH = os.path.join(Path(os.path.abspath(os.path.dirname(__file__))).parent,
-                                      f'Data\\{dataset_folder}') + '\\'
-        self.OBJECT_PATH = os.path.join(Path(os.path.abspath(os.path.dirname(__file__))).parent, 'Objects') + '\\'
+                                      f'Data/{dataset_folder}') + '/'
+        self.OBJECT_PATH = os.path.join(Path(os.path.abspath(os.path.dirname(__file__))).parent, 'Objects') + '/'
 
         self.DATA_FILE = file_name
 

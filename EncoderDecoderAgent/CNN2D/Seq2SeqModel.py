@@ -1,6 +1,4 @@
 import torch.nn as nn
-from .Encoder import Encoder
-from .Decoder import Decoder
 
 
 class Seq2Seq(nn.Module):
@@ -12,5 +10,9 @@ class Seq2Seq(nn.Module):
     def forward(self, x):
         # c is the context
         c = self.encoder(x)
+        print(c)
+        print(c.squeeze())
+        print(c.shape)
+        print(c.squeeze().shape)
         output = self.decoder(c.squeeze())
         return output

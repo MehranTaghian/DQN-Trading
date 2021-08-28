@@ -39,7 +39,7 @@ class Train:
     def write_to_file(self):
         experiment_num = 1
         import os
-        PATH = os.path.join(Path(os.path.abspath(os.path.dirname(__file__))).parent, f'Objects\\RLAgent') + '\\'
+        PATH = os.path.join(Path(os.path.abspath(os.path.dirname(__file__))).parent, f'Objects/RLAgent') + '/'
 
         while os.path.exists(
                 f'{PATH}{self.DATASET_NAME}-TRAIN_TEST_SPLIT({self.train_test_split})-NUM_ITERATIONS{self.num_iteration}-N_STEP{self.n}-GAMMA{self.gamma}-ALPHA{self.alpha}-EPSILON{self.epsilon}-EXPERIMENT({experiment_num}).pkl'):
@@ -52,7 +52,7 @@ class Train:
 
     def read_from_file(self, filename):
         import os
-        PATH = os.path.join(Path(os.path.abspath(os.path.dirname(__file__))).parent, f'Objects\\RLAgent') + '\\'
+        PATH = os.path.join(Path(os.path.abspath(os.path.dirname(__file__))).parent, f'Objects/RLAgent') + '/'
 
         with open(PATH + filename, 'rb') as input:
             self.agent = pickle.load(input)

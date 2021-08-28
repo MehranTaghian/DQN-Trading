@@ -169,7 +169,10 @@ class BaseTrain:
         experiment_num = 1
         import os
         PATH = os.path.join(Path(os.path.abspath(os.path.dirname(__file__))).parent,
-                            f'Objects\\{self.model_kind}') + '\\'
+                            f'Objects/{self.model_kind}') + '/'
+
+        if not os.path.exists(PATH):
+            os.makedirs(PATH)
 
         while os.path.exists(
                 f'{PATH}{self.DATASET_NAME}; DATA_KIND({self.data_train.data_kind}); BEGIN_DATE({self.begin_date}); '
@@ -202,7 +205,7 @@ class BaseTrain:
         else:
             import os
             file_path = os.path.join(Path(os.path.abspath(os.path.dirname(__file__))).parent,
-                                     f'Objects\\{self.model_kind}\\{file_name}')
+                                     f'Objects/{self.model_kind}/{file_name}')
 
         data = self.data_train if test_type == 'train' else self.data_test
 

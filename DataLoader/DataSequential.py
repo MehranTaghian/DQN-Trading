@@ -11,9 +11,9 @@ class DataLSTMSequential(Data):
         self.state_size = 4
 
         # self.find_trend(window_size)
-        # self.data_preprocessed = data.loc[:, ['open', 'high', 'low', 'close', 'trend_sequential']].as_matrix()
+        # self.data_preprocessed = data.loc[:, ['open', 'high', 'low', 'close', 'trend_sequential']].values
 
-        self.data_preprocessed = data.loc[:, ['open_norm', 'high_norm', 'low_norm', 'close_norm']].as_matrix()
+        self.data_preprocessed = data.loc[:, ['open_norm', 'high_norm', 'low_norm', 'close_norm']].values
 
         # scaler = MinMaxScaler()
         # scaler.fit(self.data_preprocessed)

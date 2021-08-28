@@ -22,7 +22,7 @@ class DataAutoPatternExtractionAgent(Data):
 
         self.data_kind = 'AutoPatternExtraction'
 
-        self.data_preprocessed = data.loc[:, ['open_norm', 'high_norm', 'low_norm', 'close_norm']].as_matrix()
+        self.data_preprocessed = data.loc[:, ['open_norm', 'high_norm', 'low_norm', 'close_norm']].values
 
         # scaler = MinMaxScaler()
         # scaler.fit(self.data_preprocessed)
@@ -33,21 +33,21 @@ class DataAutoPatternExtractionAgent(Data):
 
         elif state_mode == 2:  # OHLC + trend
             self.state_size = 5
-            trend = self.data.loc[:, 'trend'].as_matrix()[:, np.newaxis]
+            trend = self.data.loc[:, 'trend'].values[:, np.newaxis]
             self.data_preprocessed = np.concatenate([self.data_preprocessed, trend], axis=1)
 
         elif state_mode == 3:  # OHLC + trend + %body + %upper-shadow + %lower-shadow
             self.state_size = 8
-            candle_data = self.data.loc[:, ['trend', '%body', '%upper-shadow', '%lower-shadow']].as_matrix()
+            candle_data = self.data.loc[:, ['trend', '%body', '%upper-shadow', '%lower-shadow']].values
             self.data_preprocessed = np.concatenate([self.data_preprocessed, candle_data], axis=1)
 
         elif state_mode == 4:  # %body + %upper-shadow + %lower-shadow
             self.state_size = 3
-            self.data_preprocessed = self.data.loc[:, ['%body', '%upper-shadow', '%lower-shadow']].as_matrix()
+            self.data_preprocessed = self.data.loc[:, ['%body', '%upper-shadow', '%lower-shadow']].values
 
         # elif state_mode == 4:  # trend + %body + %upper-shadow + %lower-shadow
         #     self.state_size = 4
-        #     candle_data = self.data.loc[:, ['%body', '%upper-shadow', '%lower-shadow']].as_matrix()
+        #     candle_data = self.data.loc[:, ['%body', '%upper-shadow', '%lower-shadow']].values
         #     self.data_preprocessed = np.concatenate([self.data_preprocessed, candle_data], axis=1)
 
         elif state_mode == 5:
