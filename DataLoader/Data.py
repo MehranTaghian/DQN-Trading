@@ -5,6 +5,19 @@ import math
 class Data:
     def __init__(self, data, action_name, device, gamma, n_step=4, batch_size=50, start_index_reward=0,
                  transaction_cost=0):
+        """
+        This class is the environment that interacts with the agent.
+        @param data: this is the data_train or data_test in the DataLoader
+        @param action_name: This is the name of the action (typically the name of the model who generated
+        those actions) column in the original data-frame of the input data.
+        @param device: cpu or gpu
+        @param gamma: in the algorithm
+        @param n_step: number of future steps of reward
+        @param batch_size:
+        @param start_index_reward: for sequential input, the start index for reward is not 0. Therefore, it should be
+        provided as a function of window-size.
+        @param transaction_cost: cost of each transaction applied in the reward function.
+        """
         self.data = data
         self.states = []
         self.current_state_index = -1
@@ -21,6 +34,9 @@ class Data:
         self.trading_cost_ratio = transaction_cost
 
     def get_current_state(self):
+        """
+        @return: returns current state of the environment
+        """
         self.current_state_index += 1
         if self.current_state_index == len(self.states):
             return None
@@ -57,6 +73,10 @@ class Data:
         return done, reward, next_state
 
     def get_reward(self, action):
+        """
+        @param action: based on the action taken it returns the reward
+        @return: reward
+        """
 
         reward_index_first = self.current_state_index + self.start_index_reward
         reward_index_last = self.current_state_index + self.start_index_reward + self.n_step \
@@ -100,7 +120,7 @@ class Data:
         :param action:
         :param index:
         :param rewards:
-        :param own_share:
+        :param own_share: whether the user holds the share or not.
         :return:
         """
         index += self.start_index_reward  # Last element inside the window
@@ -157,6 +177,14 @@ class Data:
         return total_reward
 
     def make_investment(self, action_list):
+        """
+        Provided a list of actions at each time-step, it converts the action to its original name like:
+        0 -> Buy
+        1 -> None
+        2 -> Sell
+        @param action_list: ...
+        @return: ...
+        """
         self.data[self.action_name] = 'None'
         i = self.start_index_reward + 1
         for a in action_list:

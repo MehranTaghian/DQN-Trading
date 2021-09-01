@@ -107,6 +107,10 @@ class YahooFinanceDataLoader:
             # self.data.reset_index(drop=True, inplace=True)
 
     def load_data(self):
+        """
+        This function is used to read and clean data from .csv file.
+        @return:
+        """
         data = pd.read_csv(f'{self.DATA_PATH}{self.DATA_FILE}')
         data.dropna(inplace=True)
         data.set_index('Date', inplace=True)
@@ -117,6 +121,10 @@ class YahooFinanceDataLoader:
         return data, list(patterns.keys())
 
     def plot_data(self):
+        """
+        This function is used to plot the dataset (train and test in different colors).
+        @return:
+        """
         sns.set(rc={'figure.figsize': (9, 5)})
         df1 = pd.Series(self.data_train_with_date.close, index=self.data.index)
         df2 = pd.Series(self.data_test_with_date.close, index=self.data.index)
@@ -137,6 +145,10 @@ class YahooFinanceDataLoader:
             self.patterns = pickle.load(input)
 
     def normalize_data(self):
+        """
+        This function normalizes the input data
+        @return:
+        """
         min_max_scaler = MinMaxScaler()
         self.data['open_norm'] = min_max_scaler.fit_transform(self.data.open.values.reshape(-1, 1))
         self.data['high_norm'] = min_max_scaler.fit_transform(self.data.high.values.reshape(-1, 1))

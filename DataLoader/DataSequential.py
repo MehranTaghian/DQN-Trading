@@ -5,8 +5,10 @@ from sklearn.preprocessing import MinMaxScaler
 
 class DataSequential(Data):
     def __init__(self, data, action_name, device, gamma, n_step=4, batch_size=50, window_size=20, transaction_cost=0.0):
+
         super().__init__(data, action_name, device, gamma, n_step, batch_size, start_index_reward=(window_size - 1),
                          transaction_cost=transaction_cost)
+
         self.data_kind = 'LSTMSequential'
         self.state_size = 4
 
