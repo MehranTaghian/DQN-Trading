@@ -35,7 +35,7 @@ pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f ht
 
 - [X] The project also does not have a code to do Hyper-parameter search (its easy to implement).
 
-- [X] You can also set the seed for running the experiments in the `Main.ipynb`.
+- [X] You can also set the seed for running the experiments in the original code for training the models.
 
 ## Developers' Guidelines
 
