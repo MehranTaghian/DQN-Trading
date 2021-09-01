@@ -20,12 +20,12 @@ Install pytorch using the following commands. This is for CUDA 11.1 and python 3
 pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html
 ```
 
-- python - 3.8
-- pandas=0.25.1
-- numpy=1.17.2
-- matplotlib=3.1.2
-- cython=0.29.13
-- sklearn=0.22.1
+- python = 3.8
+- pandas = 1.3.2
+- numpy = 1.21.2
+- matplotlib = 3.4.3
+- cython = 0.29.24
+- scikit-learn = 0.24.2
 
 ## TODO List
 
