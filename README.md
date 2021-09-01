@@ -15,6 +15,7 @@ The deep reinforcement learning algorithm used here is Deep Q-Learning.
 ## Requirements
 
 Install pytorch using the following commands. This is for CUDA 11.1 and python 3.8:
+
 ```bash
 pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html
 ```
@@ -54,50 +55,48 @@ state space (consider that states for LSTM and convolutional models are time-ser
 OHLCs). In `DataForPatternBasedAgent.py` the states are patterns extracted using rule-based methods in technical
 analysis. In `DataAutoPatternExtractionAgent.py`
 states are Open, High, Low, and Close prices (plus some other information about the candle-stick like trend, upper
-shadow, lower shadow, etc). In `DataSequential.py` as it is obvious from the name, the state space is time-series
-which is used in both LSTM and Convolutional models. `DataSequencePrediction.py` was an idea for feeding states that
-have been predicted using an LSTM model to the RL agent. This idea is raw and needs to be developed.
+shadow, lower shadow, etc). In `DataSequential.py` as it is obvious from the name, the state space is time-series which
+is used in both LSTM and Convolutional models. `DataSequencePrediction.py` was an idea for feeding states that have been
+predicted using an LSTM model to the RL agent. This idea is raw and needs to be developed.
 
 Where ever we used encoder-decoder architecture, the decoder is the DQN agent whose neural network is the same across
 all the models.
 
-TODO: double check the data loaders.
-
 The `DeepRLAgent` directory contains the DQN model without encoder part (`VanillaInput`) whose data loader corresponds
-to `DataAutoPatternExtractionAgent.py`; an encoder-decoder model where the encoder is a 1d convolutional layer added to
-the decoder which is DQN agent under `SimpleCNNEncoder` directory; an encoder-decoder model where encoder is a simple
-MLP model and the decoder is DQN agent under `MLPEncoder` directory.
+to `DataAutoPatternExtractionAgent.py` and `DataForPatternBasedAgent.py`; an encoder-decoder model where the encoder is
+a 1d convolutional layer added to the decoder which is DQN agent under `SimpleCNNEncoder` directory; an encoder-decoder
+model where encoder is a simple MLP model and the decoder is DQN agent under `MLPEncoder` directory.
 
 Under the `EncoderDecoderAgent` there exist all the time-series models, including `CNN`
 (two-layered 1d CNN as encoder), `CNN2D` (a single-layered 2d CNN as encoder), `CNN-GRU`
 (the encoder is a 1d `CNN` over input and then a `GRU` on the output of `CNN`. The purpose of this model is that `CNN`
 extracts features from each candlestick, then`GRU`
-extracts temporal dependency among those extracted features.), `CNNAttn` (A two-layered 1d CNN with 
-attention layer for putting higher emphasis on specific parts of the features extracted from 
-the time-series data), and a `GRU` encoder which extracts temporal relations among candles.
-All of these models use `DataSequential.py` file as environment.
+extracts temporal dependency among those extracted features.), `CNNAttn` (A two-layered 1d CNN with attention layer for
+putting higher emphasis on specific parts of the features extracted from the time-series data), and a `GRU` encoder
+which extracts temporal relations among candles. All of these models use `DataSequential.py` file as environment.
 
-For running each agent, please refer to the `Main.py` file for instructions on how to run each agent
-and feed data. The `Main.py` file also has code for plotting results.
+For running each agent, please refer to the `Main.py` file for instructions on how to run each agent and feed data.
+The `Main.py` file also has code for plotting results.
 
-The `Objects` directory contains the saved models from our experiments for each agent. 
+The `Objects` directory contains the saved models from our experiments for each agent.
 
-The `PatternDetectionCandleStick` directory contains `Evaluation.py` file which has all the evaluation metrics 
-used in the paper. This file receives the actions from the agents and evaluate the result of the strategy offered
-by each agent. The `LabelPatterns.py` uses rule-based methods to generate buy or sell signals. Also `Extract.py` 
+The `PatternDetectionCandleStick` directory contains `Evaluation.py` file which has all the evaluation metrics used in
+the paper. This file receives the actions from the agents and evaluate the result of the strategy offered by each agent.
+The `LabelPatterns.py` uses rule-based methods to generate buy or sell signals. Also `Extract.py`
 is another file used for detecting wellknown candlestick patterns.
 
 `RLAgent` directory is the implementation of the traditional RL algorithm SARSA-&#955; using cython. In order to run
-that in the `Main.ipynb` you should first build the  cython file. In order to do that, run the following script
-inside it's directory in terminal:
+that in the `Main.ipynb` you should first build the cython file. In order to do that, run the following script inside
+it's directory in terminal:
+
 ```bash
 python setup.py build_ext --inplace
 ```
+
 This works for both linux and windows.
 
-
-TODO:Building the RL Agent
-
+For more information on the algorithms and models, please refer to the original paper. You can find them in the
+references.
 
 ## References
 
