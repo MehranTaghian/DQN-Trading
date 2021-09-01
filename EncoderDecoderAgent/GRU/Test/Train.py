@@ -8,7 +8,7 @@ from EncoderDecoderAgent.ReplayMemory import ReplayMemory, Transition
 
 from DataLoader.DataLoader import BitmexDataLoader
 from DataLoader.DataLoader import YahooFinanceDataLoader
-from DataLoader.DataSequential import DataLSTMSequential
+from DataLoader.DataSequential import DataSequential
 from itertools import count
 from tqdm import tqdm
 import math
@@ -290,16 +290,16 @@ data_loader = YahooFinanceDataLoader(DATASET_FOLDER, BTC_USD_FILE, True)
 # data_loader = BitmexDataLoader(True)
 
 if train_test_split:
-    dataTrain = DataLSTMSequential(data_loader.data_train,
+    dataTrain = DataSequential(data_loader.data_train,
                                    'action_encoder_decoder', device, GAMMA,
-                                   n_step, BATCH_SIZE, window_size)
-    dataTest = DataLSTMSequential(data_loader.data_test,
+                               n_step, BATCH_SIZE, window_size)
+    dataTest = DataSequential(data_loader.data_test,
                                   'action_encoder_decoder', device, GAMMA,
-                                  n_step, BATCH_SIZE, window_size)
+                              n_step, BATCH_SIZE, window_size)
 else:
-    dataTrain = DataLSTMSequential(data_loader.data,
+    dataTrain = DataSequential(data_loader.data,
                                    'action_encoder_decoder', device, GAMMA,
-                                   n_step, BATCH_SIZE, window_size)
+                               n_step, BATCH_SIZE, window_size)
     dataTest = None
 
 deepRLAgent = Train(dataTrain, dataTest, DATASET_NAME, hidden_size,

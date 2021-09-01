@@ -12,78 +12,29 @@ import ast
 from pathlib import Path
 
 
-class BitmexDataLoader:
-    """ Dataset form https://www.bitmex.com/ """
-
-    def __init__(self, load_from_file=False):
-        warnings.filterwarnings('ignore')
-
-        self.DATA_PATH = os.path.join(Path(os.path.abspath(os.path.dirname(__file__))).parent, 'Data/Bitmex') + '/'
-        self.OBJECT_PATH = os.path.join(Path(os.path.abspath(os.path.dirname(__file__))).parent, 'Objects') + '/'
-
-        self.DATA_FILE = 'XBTUSD-5m-data.csv'
-
-        if not load_from_file:
-            self.data, self.patterns = self.load_data()
-            self.save_pattern()
-            self.data_train = self.data[self.data.index < '2019-10-01']
-            self.data_test = self.data[self.data.index >= '2019-10-01']
-            self.data.to_csv(f'{self.DATA_PATH}data_processed.csv', index=True)
-            self.data_train.reset_index(drop=True, inplace=True)
-            self.data_test.reset_index(drop=True, inplace=True)
-            self.data.reset_index(drop=True, inplace=True)
-
-        else:
-            self.data = pd.read_csv(f'{self.DATA_PATH}data_processed.csv')
-            labels = list(self.data.label)
-            labels = [ast.literal_eval(l) for l in labels]
-            self.data['label'] = labels
-            self.data.set_index('timestamp', inplace=True)
-            self.load_pattern()
-            self.data_train = self.data[self.data.index < '2019-10-01']
-            self.data_test = self.data[self.data.index >= '2019-10-01']
-            self.data_train.reset_index(drop=True, inplace=True)
-            self.data_test.reset_index(drop=True, inplace=True)
-            self.data.reset_index(drop=True, inplace=True)
-
-    def load_data(self):
-        warnings.filterwarnings('ignore')
-        data = pd.read_csv(self.DATA_PATH + self.DATA_FILE, date_parser=True)
-        data.dropna(inplace=True)
-        data.timestamp = pd.to_datetime(data.timestamp.str.replace('D', 'T'))
-        data = data.sort_values('timestamp')
-        data.set_index('timestamp', inplace=True)
-
-        # data = data[-100:]
-
-        data = (data.resample('D')
-                .agg({'open': 'first', 'high': 'max', 'low': 'min', 'close': 'last'}))
-        # data['mean_candle'] = (data.close + data.open) / 2
-        data['mean_candle'] = data.close
-        patterns = label_candles(data)
-        return data, list(patterns.keys())
-
-    def save_pattern(self):
-        with open(
-                f'{self.OBJECT_PATH}pattern.pkl', 'wb') as output:
-            pickle.dump(self.patterns, output, pickle.HIGHEST_PROTOCOL)
-
-    def load_pattern(self):
-        with open(self.OBJECT_PATH + 'pattern.pkl', 'rb') as input:
-            self.patterns = pickle.load(input)
-
-
 class YahooFinanceDataLoader:
     """ Dataset form GOOGLE"""
 
     def __init__(self, dataset_folder, file_name, split_point, begin_date=None, end_date=None, load_from_file=False):
         """
-        :param dataset_folder: folder name in './Data' directory
-        :param file_name: csv file name
-        :param load_from_file: if False, it would load and process the data from the beginning
+        :param dataset_folder
+            folder name in './Data' directory
+        :param file_name
+            csv file name in the Data directory
+        :param load_from_file
+            if False, it would load and process the data from the beginning
             and save it again in a file named 'data_processed.csv'
             else, it has already processed the data and saved in 'data_processed.csv', so it can load
-            from file.
+            from file. If you have changed the original .csv file in the Data directory, you should set it to False
+            so that it will rerun the preprocessing process on the new data.
+        :param begin_date
+            This is the beginning date in the .csv file that you want to consider for the whole train and test
+            processes
+        :param end_date
+            This is the end date in the .csv file of the original data to to consider for the whole train and test
+            processes
+        :param split_point
+            The point (date) between begin_date and end_date that you want to split the train and test sets.
         """
         warnings.filterwarnings('ignore')
         self.DATA_NAME = dataset_folder

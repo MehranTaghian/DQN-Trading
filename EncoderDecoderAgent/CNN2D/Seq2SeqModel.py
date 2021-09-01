@@ -10,9 +10,5 @@ class Seq2Seq(nn.Module):
     def forward(self, x):
         # c is the context
         c = self.encoder(x)
-        print(c)
-        print(c.squeeze())
-        print(c.shape)
-        print(c.squeeze().shape)
         output = self.decoder(c.squeeze())
         return output

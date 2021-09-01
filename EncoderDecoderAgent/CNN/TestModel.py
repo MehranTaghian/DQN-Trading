@@ -1,6 +1,6 @@
 from EncoderDecoderAgent.CNN.Train import Train
 from DataLoader.DataLoader import YahooFinanceDataLoader
-from DataLoader.DataSequential import DataLSTMSequential
+from DataLoader.DataSequential import DataSequential
 from torch.utils.tensorboard import SummaryWriter
 import torch
 
@@ -164,12 +164,12 @@ transaction_cost = 0
 #                                      end_date='2015-12-31', load_from_file=True)
 # transaction_cost = 0
 
-dataTrain = DataLSTMSequential(data_loader.data_train,
+dataTrain = DataSequential(data_loader.data_train,
                                'action_encoder_decoder', device, GAMMA,
-                               n_step, BATCH_SIZE, window_size, transaction_cost=transaction_cost)
-dataTest = DataLSTMSequential(data_loader.data_test,
+                           n_step, BATCH_SIZE, window_size, transaction_cost=transaction_cost)
+dataTest = DataSequential(data_loader.data_test,
                               'action_encoder_decoder', device, GAMMA,
-                              n_step, BATCH_SIZE, window_size, transaction_cost=transaction_cost)
+                          n_step, BATCH_SIZE, window_size, transaction_cost=transaction_cost)
 
 deepRLAgent = Train(data_loader, dataTrain, dataTest, DATASET_NAME, transaction_cost,
                     BATCH_SIZE=BATCH_SIZE, GAMMA=GAMMA, EPS=EPS,

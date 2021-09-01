@@ -265,7 +265,7 @@ class Train:
 
 from DataLoader.DataLoader import BitmexDataLoader
 from DataLoader.DataLoader import YahooFinanceDataLoader
-from DataLoader.DataSequential import DataLSTMSequential
+from DataLoader.DataSequential import DataSequential
 from DataLoader.DataSequencePrediction import DataSequencePrediction
 
 BATCH_SIZE = 10
@@ -344,12 +344,12 @@ transaction_cost = 0.0
 
 
 if train_test_split:
-    dataTrain = DataLSTMSequential(data_loader.data_train,
+    dataTrain = DataSequential(data_loader.data_train,
                                    'action_encoder_decoder', device, GAMMA,
-                                   n_step, BATCH_SIZE, window_size)
-    dataTest = DataLSTMSequential(data_loader.data_test,
+                               n_step, BATCH_SIZE, window_size)
+    dataTest = DataSequential(data_loader.data_test,
                                   'action_encoder_decoder', device, GAMMA,
-                                  n_step, BATCH_SIZE, window_size)
+                              n_step, BATCH_SIZE, window_size)
 
     # dataTrain = DataSequencePrediction(data_loader.data_train,
     #                                    'action_encoder_decoder', model_file_name, device, GAMMA,
@@ -358,9 +358,9 @@ if train_test_split:
     #                                   'action_encoder_decoder', model_file_name, device, GAMMA,
     #                                   n_step, BATCH_SIZE, window_size)
 else:
-    dataTrain = DataLSTMSequential(data_loader.data,
+    dataTrain = DataSequential(data_loader.data,
                                    'action_encoder_decoder', device, GAMMA,
-                                   n_step, BATCH_SIZE, window_size)
+                               n_step, BATCH_SIZE, window_size)
     dataTest = None
 
 deepRLAgent = Train(dataTrain, dataTest, DATASET_NAME, attn_output_size,

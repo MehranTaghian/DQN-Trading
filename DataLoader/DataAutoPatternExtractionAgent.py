@@ -7,14 +7,17 @@ class DataAutoPatternExtractionAgent(Data):
     def __init__(self, data, state_mode, action_name, device, gamma, n_step=4, batch_size=50, window_size=1,
                  transaction_cost=0.0):
         """
-        :param state_mode:
+        :param state_mode
                 = 1 for OHLC
                 = 2 for OHLC + trend
                 = 3 for OHLC + trend + %body + %upper-shadow + %lower-shadow
                 = 4 for trend + %body + %upper-shadow + %lower-shadow
                 = 5 a window of k candles + the trend of the candles inside the window
-        :param action_name: name of the column of the action
-        :param device: GPU or CPU selected by pytorch
+        :param action_name
+            name of the column of the action
+        :param device
+            GPU or CPU selected by pytorch
+        :param gamma
         """
         start_index_reward = 0 if state_mode != 5 else window_size - 1
         super().__init__(data, action_name, device, gamma, n_step, batch_size, start_index_reward=start_index_reward,
