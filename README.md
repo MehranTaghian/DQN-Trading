@@ -98,6 +98,10 @@ This works for both linux and windows.
 For more information on the algorithms and models, please refer to the original paper. You can find them in the
 references.
 
+If you had any questions regarding the paper, code, or you wanted to contribute,
+please send me an email: taghianmehran@gmail.com
+
+
 ## References
 
 ```

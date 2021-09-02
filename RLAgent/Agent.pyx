@@ -10,7 +10,7 @@ def update_tuple(prev_tuple, index, value):
 
 cdef class Agent:
     """
-        :param Q_value is a dictionary containing the value of the state-action pairs. Each
+        :@param Q_value is a dictionary containing the value of the state-action pairs. Each
         state is a dictionary of actions.
         Q_value[current_state][0]: value of the action = Buy Share in the current state.
         Q_value[current_state][1]: value of the action = None in the current state.
@@ -57,6 +57,9 @@ cdef class Agent:
         self.n = n
 
     cpdef void value_iteration(self):
+        """
+        This function is the core of the training of our RL agent using n-step SARSA
+        """
         cdef:
             list available_actions = [0, 1, 2]
             int len_data = len(self.data_states)
@@ -117,6 +120,14 @@ cdef class Agent:
             yield action
 
     cdef int policy_epsilon_greedy(self, tuple state, list available_actions, use_epsilon=True):
+        """
+        returns an action which is either random (with probability epsilon) or the action that 
+        has the maximum value in the Q-function
+        @param state: current state
+        @param available_actions: 
+        @param use_epsilon: 
+        @return: 
+        """
         cdef:
             list action_value_list = []
             np.ndarray action_value_list_numpy
@@ -140,11 +151,10 @@ cdef class Agent:
         The reward for selling is the opposite of the reward for buying, meaning that if some one sells his share and the
         value of the share increases, thus he should be punished. In addition, if some one sells appropriately and the value
         of the share decreases, he should be awarded
-        :param action: 
-        :param index: 
-        :param rewards: 
-        :param own_share: 
-        :return: 
+        :@param action: current action in the current state
+        :@param index: index in the episode (each episode contains the whole candlesticks in the stock) 
+        :@param rewards: rewards in the n-step reward
+        :@param own_share: whether the agent is holding the stock or already sold it.
         """
         if action == 0 or (action == 1 and own_share):  # Buy Share or Hold Share
             rewards.append(self.data_close_price[index + 1] - self.data_close_price[index])
@@ -176,6 +186,9 @@ cdef class Agent:
         return reward
 
     cdef void check_state_in_state_value_dict(self, tuple current):
+        """
+        If the state was first visited, it will create an entry in the Q-table
+        """
         if not (current in self.Q_value.keys()):
             self.Q_value[current] = {}
             self.Q_value[current][0] = 0.0
@@ -210,22 +223,3 @@ cdef class Agent:
             if self.convert_to_tuple(data.iloc[i]['label']) == self.idle_state:
                 j += 1
         return j
-
-    cpdef get_Qvalue_log(self):
-        Q_value_log = {}
-        for q in self.Q_value.keys():
-            pattern_list = self.convert_to_label(q)
-            label = str(pattern_list)
-            if not (label in Q_value_log.keys()):
-                Q_value_log[label] = {}
-
-            Q_value_log[label]['buy'] = self.Q_value[q][0]
-            Q_value_log[label]['None'] = self.Q_value[q][1]
-            Q_value_log[label]['sell'] = self.Q_value[q][2]
-
-            print(', '.join([str(i) for i in pattern_list]) + ' & ' + str(
-                format(Q_value_log[label]['buy'], '.3f')) + ' & ' + str(
-                format(Q_value_log[label]['None'], '.3f')) + ' & ' +
-                  str(format(Q_value_log[label]['sell'], '.3f')) + '\\\\')
-
-        return Q_value_log

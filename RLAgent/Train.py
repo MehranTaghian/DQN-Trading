@@ -20,6 +20,17 @@ class Train:
     def __init__(self, data_train, data_test, patterns, dataset_name, n=5, num_iteration=10000,
                  gamma=1, alpha=0.3,
                  epsilon=0.01):
+        """
+        @param data_train: of type DataForPatternBasedAgent
+        @param data_test: of type DataForPatternBasedAgent.py
+        @param patterns: a dictionary of patterns.
+        @param dataset_name: this is used for the name of the output model of the experiment
+        @param n: n-step reward in the future
+        @param num_iteration: Number of iteartions of training
+        @param gamma: in the algorithm (refet to the paper)
+        @param alpha: in the algorithm (refer to the paper)
+        @param epsilon: epsilon in the epsilon greedy algorithm.
+        """
         self.data_train = data_train
         self.data_test = data_test
         self.agent = Agent(self.data_train, patterns, n, gamma, alpha, epsilon)
@@ -58,6 +69,11 @@ class Train:
             self.agent = pickle.load(input)
 
     def test(self, test_type='train'):
+        """
+        evaluates the model's performance
+        @param test_type: 'train' or 'test'
+        @return: an evaluation object to access to different evaluation metrics.
+        """
         self.make_investment(self.data_train)
         if self.data_test is not None:
             self.make_investment(self.data_test)
@@ -80,23 +96,4 @@ def convert_number_to_action(a):
         return 'sell'
     else:
         return 'None'
-
-
-def load_data(data_path):
-    warnings.filterwarnings('ignore')
-    data = pd.read_csv(data_path, date_parser=True)
-    data.dropna(inplace=True)
-    data.timestamp = pd.to_datetime(data.timestamp.str.replace('D', 'T'))
-    data = data.sort_values('timestamp')
-    data.set_index('timestamp', inplace=True)
-
-    # data = data[-100:]
-
-    data = (data.resample('D')
-            .agg({'open': 'first', 'high': 'max', 'low': 'min', 'close': 'last'}))
-    # data['mean_candle'] = (data.close + data.open) / 2
-    data['mean_candle'] = data.close
-    data.reset_index(drop=True, inplace=True)
-    patterns = label_candles(data)
-    return data, list(patterns.keys())
 

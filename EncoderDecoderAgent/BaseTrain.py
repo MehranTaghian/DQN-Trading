@@ -16,13 +16,36 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 class BaseTrain:
-    def __init__(self, data_loader, data_train, data_test, dataset_name, model_kind, transaction_cost=0.0,
-                 BATCH_SIZE=30, GAMMA=0.7, EPS=0.1, ReplayMemorySize=50, TARGET_UPDATE=5,
-                 n_actions=3, n_step=10, window_size=20):
+    def __init__(self, data_loader,
+                 data_train,
+                 data_test,
+                 dataset_name,
+                 model_kind,
+                 transaction_cost=0.0,
+                 BATCH_SIZE=30,
+                 GAMMA=0.7,
+                 EPS=0.1,
+                 ReplayMemorySize=50,
+                 TARGET_UPDATE=5,
+                 n_actions=3,
+                 n_step=10,
+                 window_size=20):
         """
-        :param TARGET_UPDATE: Every TARGET_UPDATE iterations, we give the weights of the Policy network to the Target
-                                network.
-        :param n_step: n in n-step SARSA
+        This class is the base class for training across multiple models in the EncoderDecoderAgent directory.
+        @param data_loader: The data loader here is to only access the start_data, end_data and split point in order to
+            name the result file of the experiment
+        @param data_train: of type DataAutoPatternExtractionAgent
+        @param data_test: of type DataAutoPatternExtractionAgent
+        @param dataset_name: for using in the name of the result file
+        @param window_size: for using in the name of the result file
+        @param transaction_cost: for using in the name of the result file
+        @param BATCH_SIZE: batch size for batch training
+        @param GAMMA: in the algorithm
+        @param EPS: epsilon in the epsilon greedy algorithm
+        @param ReplayMemorySize: size of the replay buffer
+        @param TARGET_UPDATE: hard update policy network into target network every TARGET_UPDATE iterations
+        @param n_actions: is used as the output size of the network.
+        @param n_step: for using in the name of the result file
         """
         print(model_kind)
         self.data_train = data_train
@@ -221,9 +244,9 @@ class BaseTrain:
 
     def test(self, file_name, action_name, initial_investment=1000, test_type='train'):
         """
-        :param file_name: name of the .pkl file to load the model
-        :param test_type: test results on train data or test data
-        :return:
+        :@param file_name: name of the .pkl file to load the model
+        :@param test_type: test results on train data or test data
+        :@return returns an Evaluation object to have access to different evaluation metrics.
         """
         if file_name is None:
             file_path = self.model_file_name

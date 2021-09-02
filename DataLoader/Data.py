@@ -56,8 +56,6 @@ class Data:
 
         if self.current_state_index + self.n_step < len(self.states):
             next_state = self.states[self.current_state_index + self.n_step]
-        # if self.current_state_index + 1 < len(self.states):
-        #     next_state = self.states[self.current_state_index + 1]
         else:
             done = True
 
@@ -92,24 +90,6 @@ class Data:
             # consider the transaction in the reverse order
             reward = ((1 - self.trading_cost_ratio) ** 2 * p1 / p2 - 1) * 100
 
-        # rewards = []
-        # reward = 0
-        # # We see a state after the close price, so we start rewarding the day after, because the agent
-        # # would buy the stock in the next day
-        # i = 1
-        # while i < self.n_step:
-        #     if self.current_state_index + i + 1 < len(self.states):
-        #         self.calculate_reward_for_one_step(action, self.current_state_index + i, rewards)
-        #     else:
-        #         break
-        #     i += 1
-        #
-        # i = 0
-        # while i < len(rewards):
-        #     reward += (self.gamma ** i) * rewards[i]
-        #     i += 1
-        # reward /= self.n_step
-
         return reward
 
     def calculate_reward_for_one_step(self, action, index, rewards):
@@ -127,18 +107,10 @@ class Data:
         if action == 0 or (action == 1 and self.own_share):  # Buy Share or Hold Share
             difference = self.close_price[index + 1] - self.close_price[index]
             rewards.append(difference)
-            # if action == 0:
-            #     rewards.append((1 - self.trading_cost_ratio) * difference)
-            # else:
-            #     rewards.append(difference)
 
         elif action == 2 or (action == 1 and not self.own_share):  # Sell Share or No Share
             difference = self.close_price[index] - self.close_price[index + 1]
             rewards.append(difference)
-            # if action == 2:
-            #     rewards.append((1 - self.trading_cost_ratio) * difference)  # opposite of the buy case
-            # else:
-            #     rewards.append(difference)  # opposite of the buy case
 
     def reset(self):
         self.current_state_index = -1
