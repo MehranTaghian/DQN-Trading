@@ -5,21 +5,27 @@ from sklearn.preprocessing import MinMaxScaler
 
 class DataSequential(Data):
     def __init__(self, data, action_name, device, gamma, n_step=4, batch_size=50, window_size=20, transaction_cost=0.0):
-
+        """
+        This class is inherited from the Data class (which is the environment) and designed to change the state space
+        to a sequence of candles in each time-step.
+        @param data:
+            which is of type DataLoader.data_train or DataLoader.data_test and is a data-frame
+        @param action_name:
+            Name of the column of the action which will be added to the data-frame of data after finding the strategy by
+            a specific model.
+        @param device: CPU or GPU
+        @param n_step: number of steps in the future to get reward.
+        @param batch_size: create batches of observations of size batch_size
+        @param window_size: the number of sequential candles that are selected to be in one observation
+        @param transaction_cost: cost of the transaction which is applied in the reward function.
+        """
         super().__init__(data, action_name, device, gamma, n_step, batch_size, start_index_reward=(window_size - 1),
                          transaction_cost=transaction_cost)
 
         self.data_kind = 'LSTMSequential'
         self.state_size = 4
 
-        # self.find_trend(window_size)
-        # self.data_preprocessed = data.loc[:, ['open', 'high', 'low', 'close', 'trend_sequential']].values
-
         self.data_preprocessed = data.loc[:, ['open_norm', 'high_norm', 'low_norm', 'close_norm']].values
-
-        # scaler = MinMaxScaler()
-        # scaler.fit(self.data_preprocessed)
-        # self.data_preprocessed = scaler.transform(self.data_preprocessed)
 
         # We ignore the first window_size elements of the data because of trend
         # for i in range(window_size - 1, len(self.data_preprocessed) - window_size + 1):
@@ -30,22 +36,6 @@ class DataSequential(Data):
                     self.data_preprocessed[j], dtype=torch.float, device=device)
 
             self.states.append(temp_states.unsqueeze(1))
-
-    def find_trend(self, window_size=20):
-        self.data['MA'] = self.data.mean_candle.rolling(window_size).mean()
-        self.data['trend_sequential'] = -10
-
-        for index in range(len(self.data)):
-            moving_average_history = []
-            if index >= window_size - 1:
-                for i in range(index - window_size + 1, index + 1):
-                    moving_average_history.append(self.data['MA'][i])
-            difference_moving_average = 0
-            for i in range(len(moving_average_history) - 1, 0, -1):
-                difference_moving_average += (moving_average_history[i] - moving_average_history[i - 1])
-
-            # trend = 1 means ascending, and trend = 0 means descending
-            self.data['trend_sequential'][index] = 1 if (difference_moving_average / window_size) > 0 else 0
 
     def __next__(self):
         if self.index_batch < self.num_batch:
