@@ -75,8 +75,8 @@ extracts temporal dependency among those extracted features.), `CNNAttn` (A two-
 putting higher emphasis on specific parts of the features extracted from the time-series data), and a `GRU` encoder
 which extracts temporal relations among candles. All of these models use `DataSequential.py` file as environment.
 
-For running each agent, please refer to the `Main.py` file for instructions on how to run each agent and feed data.
-The `Main.py` file also has code for plotting results.
+For running each agent, please refer to the `Main.ipynb` file for instructions on how to run each agent and feed data.
+The `Main.ipynb` file also has code for plotting results.
 
 The `Objects` directory contains the saved models from our experiments for each agent.
 
