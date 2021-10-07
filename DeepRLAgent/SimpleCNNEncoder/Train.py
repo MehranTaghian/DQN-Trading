@@ -21,10 +21,8 @@ class Train(BaseTrain):
                  n_classes=64,
                  BATCH_SIZE=30,
                  GAMMA=0.7,
-                 EPS=0.1,
                  ReplayMemorySize=50,
                  TARGET_UPDATE=5,
-                 n_actions=3,
                  n_step=10):
         """
         This class is inherited from the BaseTrain class to initialize networks and other stuff that are specific to this
@@ -42,19 +40,27 @@ class Train(BaseTrain):
         @param n_classes: this is the feature vector size of the encoder's output.
         @param BATCH_SIZE: batch size for batch training
         @param GAMMA: in the algorithm
-        @param EPS: epsilon in the epsilon greedy algorithm
         @param ReplayMemorySize: size of the replay buffer
         @param TARGET_UPDATE: hard update policy network into target network every TARGET_UPDATE iterations
-        @param n_actions: is used as the output size of the network.
         @param n_step: for using in the name of the result file
         """
-        super(Train, self).__init__(data_loader, data_train, data_test, dataset_name, 'SimpleCNNEncoder', state_mode,
-                                    window_size, transaction_cost, BATCH_SIZE, GAMMA,
-                                    EPS, ReplayMemorySize, TARGET_UPDATE, n_actions, n_step)
+        super(Train, self).__init__(data_loader,
+                                    data_train,
+                                    data_test,
+                                    dataset_name,
+                                    'SimpleCNNEncoder',
+                                    state_mode,
+                                    window_size,
+                                    transaction_cost,
+                                    BATCH_SIZE,
+                                    GAMMA,
+                                    ReplayMemorySize,
+                                    TARGET_UPDATE,
+                                    n_step)
 
         self.encoder = Encoder(n_classes, data_train.state_size).to(device)
-        self.policy_decoder = Decoder(n_classes, n_actions).to(device)
-        self.target_decoder = Decoder(n_classes, n_actions).to(device)
+        self.policy_decoder = Decoder(n_classes, 3).to(device)
+        self.target_decoder = Decoder(n_classes, 3).to(device)
 
         self.policy_net = Seq2Seq(self.encoder, self.policy_decoder).to(device)
         self.target_net = Seq2Seq(self.encoder, self.target_decoder).to(device)
@@ -66,7 +72,7 @@ class Train(BaseTrain):
 
 
         test_encoder = Encoder(n_classes, self.data_train.state_size).to(device)
-        test_decoder = Decoder(n_classes, self.n_actions).to(device)
+        test_decoder = Decoder(n_classes, 3).to(device)
 
         self.test_net = Seq2Seq(test_encoder, test_decoder)
         self.test_net.to(device)

@@ -20,10 +20,8 @@ class Train(BaseTrain):
                  transaction_cost,
                  BATCH_SIZE=30,
                  GAMMA=0.7,
-                 EPS=0.1,
                  ReplayMemorySize=50,
                  TARGET_UPDATE=5,
-                 n_actions=3,
                  n_step=10,
                  window_size=20):
         """
@@ -40,17 +38,23 @@ class Train(BaseTrain):
         @param transaction_cost: for using in the name of the result file
         @param BATCH_SIZE: batch size for batch training
         @param GAMMA: in the algorithm
-        @param EPS: epsilon in the epsilon greedy algorithm
         @param ReplayMemorySize: size of the replay buffer
         @param TARGET_UPDATE: hard update policy network into target network every TARGET_UPDATE iterations
-        @param n_actions: is used as the output size of the network.
         @param n_step: for using in the name of the result file
         @param decoder_input_size: size of the feature vector output of the encoder
         """
-        super(Train, self).__init__(data_loader, data_train, data_test, dataset_name, 'CNN2D',
+        super(Train, self).__init__(data_loader,
+                                    data_train,
+                                    data_test,
+                                    dataset_name,
+                                    'CNN2D',
                                     transaction_cost,
-                                    BATCH_SIZE, GAMMA, EPS, ReplayMemorySize, TARGET_UPDATE,
-                                    n_actions, n_step, window_size)
+                                    BATCH_SIZE,
+                                    GAMMA,
+                                    ReplayMemorySize,
+                                    TARGET_UPDATE,
+                                    n_step,
+                                    window_size)
 
         self.decoder_input_size = decoder_input_size
 

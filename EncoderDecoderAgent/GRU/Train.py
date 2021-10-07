@@ -20,10 +20,8 @@ class Train(BaseTrain):
                  hidden_size=50,
                  BATCH_SIZE=30,
                  GAMMA=0.7,
-                 EPS=0.1,
                  ReplayMemorySize=50,
                  TARGET_UPDATE=5,
-                 n_actions=3,
                  n_step=10,
                  window_size=20):
         """
@@ -43,15 +41,23 @@ class Train(BaseTrain):
         @param BATCH_SIZE: batch size for batch training
         @param GAMMA: in the algorithm
         @param hidden_size: size of the output feature vector from the encoder
-        @param EPS: epsilon in the epsilon greedy algorithm
         @param ReplayMemorySize: size of the replay buffer
         @param TARGET_UPDATE: hard update policy network into target network every TARGET_UPDATE iterations
         @param n_actions: is used as the output size of the network.
         @param n_step: for using in the name of the result file
         """
-        super(Train, self).__init__(data_loader, data_train, data_test, dataset_name, 'GRU', transaction_cost,
+        super(Train, self).__init__(data_loader,
+                                    data_train,
+                                    data_test,
+                                    dataset_name,
+                                    'GRU',
+                                    transaction_cost,
                                     BATCH_SIZE,
-                                    GAMMA, EPS, ReplayMemorySize, TARGET_UPDATE, n_actions, n_step, window_size)
+                                    GAMMA,
+                                    ReplayMemorySize,
+                                    TARGET_UPDATE,
+                                    n_step,
+                                    window_size)
         self.hidden_size = hidden_size
 
         self.encoder = EncoderRNN(self.data_train.state_size, self.hidden_size, device).to(device)

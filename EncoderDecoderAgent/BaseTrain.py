@@ -24,10 +24,8 @@ class BaseTrain:
                  transaction_cost=0.0,
                  BATCH_SIZE=30,
                  GAMMA=0.7,
-                 EPS=0.1,
                  ReplayMemorySize=50,
                  TARGET_UPDATE=5,
-                 n_actions=3,
                  n_step=10,
                  window_size=20):
         """
@@ -41,10 +39,8 @@ class BaseTrain:
         @param transaction_cost: for using in the name of the result file
         @param BATCH_SIZE: batch size for batch training
         @param GAMMA: in the algorithm
-        @param EPS: epsilon in the epsilon greedy algorithm
         @param ReplayMemorySize: size of the replay buffer
         @param TARGET_UPDATE: hard update policy network into target network every TARGET_UPDATE iterations
-        @param n_actions: is used as the output size of the network.
         @param n_step: for using in the name of the result file
         """
         print(model_kind)
@@ -53,7 +49,6 @@ class BaseTrain:
         self.DATASET_NAME = dataset_name
         self.BATCH_SIZE = BATCH_SIZE
         self.GAMMA = GAMMA
-        self.EPS = EPS
         self.ReplayMemorySize = ReplayMemorySize
         self.window_size = window_size
         self.model_kind = model_kind
@@ -63,7 +58,6 @@ class BaseTrain:
         self.end_date = data_loader.end_date
 
         self.TARGET_UPDATE = TARGET_UPDATE
-        self.n_actions = n_actions
         self.n_step = n_step
         self.transaction_cost = transaction_cost
 
@@ -84,8 +78,6 @@ class BaseTrain:
                         math.exp(-1. * self.steps_done / self.EPS_DECAY)
         self.steps_done += 1
 
-        # eps_threshold = self.EPS
-
         if sample > eps_threshold:
             with torch.no_grad():
                 # t.max(1) will return largest column value of each row.
@@ -97,7 +89,7 @@ class BaseTrain:
                 self.policy_net.train()
                 return action
         else:
-            return torch.tensor([[random.randrange(self.n_actions)]], device=device, dtype=torch.long)
+            return torch.tensor([[random.randrange(3)]], device=device, dtype=torch.long)
 
     def optimize_model(self):
         if len(self.memory) < self.BATCH_SIZE:
@@ -228,14 +220,14 @@ class BaseTrain:
                 f'{PATH}{self.DATASET_NAME}; DATA_KIND({self.data_train.data_kind}); '
                 f'Dates({self.begin_date}, {self.split_point}, {self.end_date}); {self.model_kind}; '
                 f'TC({self.transaction_cost}); WindowSize({self.window_size}); '
-                f'BATCH_SIZE{self.BATCH_SIZE}; GAMMA{self.GAMMA}; EPS{self.EPS}; '
+                f'BATCH_SIZE{self.BATCH_SIZE}; GAMMA{self.GAMMA}; '
                 f'REPLAY_MEMORY_SIZE{self.ReplayMemorySize}; C{self.TARGET_UPDATE}; N_SARSA{self.n_step}({experiment_num}).pkl'):
             experiment_num += 1
 
         file_name = (f'{PATH}{self.DATASET_NAME}; DATA_KIND({self.data_train.data_kind}); '
                      f'Dates({self.begin_date}, {self.split_point}, {self.end_date}); {self.model_kind}; '
                      f'TC({self.transaction_cost}); WindowSize({self.window_size}); '
-                     f'BATCH_SIZE{self.BATCH_SIZE}; GAMMA{self.GAMMA}; EPS{self.EPS}; '
+                     f'BATCH_SIZE{self.BATCH_SIZE}; GAMMA{self.GAMMA}; '
                      f'REPLAY_MEMORY_SIZE{self.ReplayMemorySize}; C{self.TARGET_UPDATE}; '
                      f'N_SARSA{self.n_step}({experiment_num}).pkl')
 

@@ -17,10 +17,8 @@ class Train(BaseTrain):
                  transaction_cost=0.0,
                  BATCH_SIZE=30,
                  GAMMA=0.7,
-                 EPS=0.1,
                  ReplayMemorySize=50,
                  TARGET_UPDATE=5,
-                 n_actions=3,
                  n_step=10):
         """
         This class is inherited from the BaseTrain class to initialize networks and other stuff that are specific to this
@@ -38,23 +36,31 @@ class Train(BaseTrain):
         @param n_classes: this is the feature vector size of the encoder's output.
         @param BATCH_SIZE: batch size for batch training
         @param GAMMA: in the algorithm
-        @param EPS: epsilon in the epsilon greedy algorithm
         @param ReplayMemorySize: size of the replay buffer
         @param TARGET_UPDATE: hard update policy network into target network every TARGET_UPDATE iterations
-        @param n_actions: is used as the output size of the network.
         @param n_step: for using in the name of the result file
         """
 
-        super(Train, self).__init__(data_loader, data_train, data_test, dataset_name, 'DeepRL', state_mode, window_size,
-                                    transaction_cost, BATCH_SIZE, GAMMA, EPS, ReplayMemorySize,
-                                    TARGET_UPDATE, n_actions, n_step)
+        super(Train, self).__init__(data_loader,
+                                    data_train,
+                                    data_test,
+                                    dataset_name,
+                                    'DeepRL',
+                                    state_mode,
+                                    window_size,
+                                    transaction_cost,
+                                    BATCH_SIZE,
+                                    GAMMA,
+                                    ReplayMemorySize,
+                                    TARGET_UPDATE,
+                                    n_step)
 
-        self.policy_net = DQN(data_train.state_size, n_actions).to(device)
-        self.target_net = DQN(data_train.state_size, n_actions).to(device)
+        self.policy_net = DQN(data_train.state_size, 3).to(device)
+        self.target_net = DQN(data_train.state_size, 3).to(device)
         self.target_net.load_state_dict(self.policy_net.state_dict())
         self.target_net.eval()
 
         self.optimizer = optim.Adam(self.policy_net.parameters())
 
-        self.test_net = DQN(self.data_train.state_size, self.n_actions)
+        self.test_net = DQN(self.data_train.state_size, 3)
         self.test_net.to(device)

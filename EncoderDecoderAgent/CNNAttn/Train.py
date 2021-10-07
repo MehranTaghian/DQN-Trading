@@ -20,10 +20,8 @@ class Train(BaseTrain):
                  attn_output_size=64,
                  BATCH_SIZE=30,
                  GAMMA=0.7,
-                 EPS=0.1,
                  ReplayMemorySize=50,
                  TARGET_UPDATE=5,
-                 n_actions=3,
                  n_step=10,
                  window_size=20):
         """
@@ -40,16 +38,23 @@ class Train(BaseTrain):
         @param transaction_cost: for using in the name of the result file
         @param BATCH_SIZE: batch size for batch training
         @param GAMMA: in the algorithm
-        @param EPS: epsilon in the epsilon greedy algorithm
         @param ReplayMemorySize: size of the replay buffer
         @param attn_output_size: size of the output feature vector from the encoder
         @param TARGET_UPDATE: hard update policy network into target network every TARGET_UPDATE iterations
-        @param n_actions: is used as the output size of the network.
         @param n_step: for using in the name of the result file
         """
-        super(Train, self).__init__(data_loader, data_train, data_test, dataset_name, 'CNN-ATTN', transaction_cost,
-                                    BATCH_SIZE, GAMMA, EPS, ReplayMemorySize, TARGET_UPDATE,
-                                    n_actions, n_step, window_size)
+        super(Train, self).__init__(data_loader,
+                                    data_train,
+                                    data_test,
+                                    dataset_name,
+                                    'CNN-ATTN',
+                                    transaction_cost,
+                                    BATCH_SIZE,
+                                    GAMMA,
+                                    ReplayMemorySize,
+                                    TARGET_UPDATE,
+                                    n_step,
+                                    window_size)
 
         self.encoder = Encoder(self.data_train.state_size)
         self.attention = AttentionLayer(self.window_size, attn_output_size)
