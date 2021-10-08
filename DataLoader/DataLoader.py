@@ -15,9 +15,9 @@ from pathlib import Path
 class YahooFinanceDataLoader:
     """ Dataset form GOOGLE"""
 
-    def __init__(self, dataset_folder, file_name, split_point, begin_date=None, end_date=None, load_from_file=False):
+    def __init__(self, dataset_name, split_point, begin_date=None, end_date=None, load_from_file=False):
         """
-        :param dataset_folder
+        :param dataset_name
             folder name in './Data' directory
         :param file_name
             csv file name in the Data directory
@@ -37,12 +37,12 @@ class YahooFinanceDataLoader:
             The point (date) between begin_date and end_date that you want to split the train and test sets.
         """
         warnings.filterwarnings('ignore')
-        self.DATA_NAME = dataset_folder
+        self.DATA_NAME = dataset_name
         self.DATA_PATH = os.path.join(Path(os.path.abspath(os.path.dirname(__file__))).parent,
-                                      f'Data/{dataset_folder}') + '/'
+                                      f'Data/{dataset_name}') + '/'
         self.OBJECT_PATH = os.path.join(Path(os.path.abspath(os.path.dirname(__file__))).parent, 'Objects') + '/'
 
-        self.DATA_FILE = file_name
+        self.DATA_FILE = dataset_name + '.csv'
 
         self.split_point = split_point
         self.begin_date = begin_date

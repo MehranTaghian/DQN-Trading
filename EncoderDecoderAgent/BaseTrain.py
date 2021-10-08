@@ -7,6 +7,7 @@ from EncoderDecoderAgent.ReplayMemory import ReplayMemory, Transition
 from itertools import count
 from tqdm import tqdm
 import math
+import os
 
 from pathlib import Path
 
@@ -70,6 +71,25 @@ class BaseTrain:
         self.EPS_DECAY = 500
 
         self.steps_done = 0
+
+        self.PATH = os.path.join(Path(os.path.abspath(os.path.dirname(__file__))).parent,
+                                 f'Results/{self.DATASET_NAME}/'
+                                 f'{self.model_kind}; '
+                                 f'DATA_KIND({self.data_train.data_kind}); '
+                                 f'BEGIN_DATE({self.begin_date}); '
+                                 f'END_DATE({self.end_date}); '
+                                 f'SPLIT_POINT({self.split_point}); '
+                                 f'WindowSize({self.window_size}); '
+                                 f'BATCH_SIZE{self.BATCH_SIZE}; '
+                                 f'GAMMA{self.GAMMA}; '
+                                 f'REPLAY_MEMORY_SIZE{self.ReplayMemorySize}; '
+                                 f'TARGET_UPDATE{self.TARGET_UPDATE}; '
+                                 f'N_STEP{self.n_step}')
+
+        if not os.path.exists(self.PATH):
+            os.makedirs(self.PATH)
+
+        self.model_dir = os.path.join(self.PATH, f'model.pkl')
 
     def select_action(self, state):
         sample = random.random()
@@ -207,49 +227,17 @@ class BaseTrain:
         print('Complete')
 
     def save_model(self, model):
+        torch.save(model, self.model_dir)
 
-        experiment_num = 1
-        import os
-        PATH = os.path.join(Path(os.path.abspath(os.path.dirname(__file__))).parent,
-                            f'Objects/{self.model_kind}') + '/'
-
-        if not os.path.exists(PATH):
-            os.makedirs(PATH)
-
-        while os.path.exists(
-                f'{PATH}{self.DATASET_NAME}; DATA_KIND({self.data_train.data_kind}); '
-                f'Dates({self.begin_date}, {self.split_point}, {self.end_date}); {self.model_kind}; '
-                f'TC({self.transaction_cost}); WindowSize({self.window_size}); '
-                f'BATCH_SIZE{self.BATCH_SIZE}; GAMMA{self.GAMMA}; '
-                f'REPLAY_MEMORY_SIZE{self.ReplayMemorySize}; C{self.TARGET_UPDATE}; N_SARSA{self.n_step}({experiment_num}).pkl'):
-            experiment_num += 1
-
-        file_name = (f'{PATH}{self.DATASET_NAME}; DATA_KIND({self.data_train.data_kind}); '
-                     f'Dates({self.begin_date}, {self.split_point}, {self.end_date}); {self.model_kind}; '
-                     f'TC({self.transaction_cost}); WindowSize({self.window_size}); '
-                     f'BATCH_SIZE{self.BATCH_SIZE}; GAMMA{self.GAMMA}; '
-                     f'REPLAY_MEMORY_SIZE{self.ReplayMemorySize}; C{self.TARGET_UPDATE}; '
-                     f'N_SARSA{self.n_step}({experiment_num}).pkl')
-
-        torch.save(model, file_name)
-        self.model_file_name = file_name
-
-    def test(self, file_name, action_name, initial_investment=1000, test_type='train'):
+    def test(self, initial_investment=1000, test_type='test'):
         """
         :@param file_name: name of the .pkl file to load the model
         :@param test_type: test results on train data or test data
         :@return returns an Evaluation object to have access to different evaluation metrics.
         """
-        if file_name is None:
-            file_path = self.model_file_name
-        else:
-            import os
-            file_path = os.path.join(Path(os.path.abspath(os.path.dirname(__file__))).parent,
-                                     f'Objects/{self.model_kind}/{file_name}')
-
         data = self.data_train if test_type == 'train' else self.data_test
 
-        self.test_net.load_state_dict(torch.load(file_path))
+        self.test_net.load_state_dict(torch.load(self.model_dir))
         self.test_net.to(device)
 
         action_list = []
@@ -263,7 +251,7 @@ class BaseTrain:
                 action_list += [1]  # None
 
         data.make_investment(action_list)
-        ev_agent = Evaluation(data.data, action_name, initial_investment, self.transaction_cost)
+        ev_agent = Evaluation(data.data, data.action_name, initial_investment, self.transaction_cost)
         print(test_type)
         ev_agent.evaluate()
         return ev_agent

@@ -43,7 +43,6 @@ class Train(BaseTrain):
         @param hidden_size: size of the output feature vector from the encoder
         @param ReplayMemorySize: size of the replay buffer
         @param TARGET_UPDATE: hard update policy network into target network every TARGET_UPDATE iterations
-        @param n_actions: is used as the output size of the network.
         @param n_step: for using in the name of the result file
         """
         super(Train, self).__init__(data_loader,
@@ -62,8 +61,8 @@ class Train(BaseTrain):
 
         self.encoder = EncoderRNN(self.data_train.state_size, self.hidden_size, device).to(device)
         self.attention = AttentionLayer(self.hidden_size, self.window_size, device).to(device)
-        self.policy_decoder = Decoder(self.hidden_size, self.n_actions).to(device)
-        self.target_decoder = Decoder(self.hidden_size, self.n_actions).to(device)
+        self.policy_decoder = Decoder(self.hidden_size).to(device)
+        self.target_decoder = Decoder(self.hidden_size).to(device)
 
         self.policy_net = Seq2Seq(self.encoder, self.attention, self.policy_decoder).to(device)
         self.target_net = Seq2Seq(self.encoder, self.attention, self.target_decoder).to(device)
@@ -74,6 +73,6 @@ class Train(BaseTrain):
 
         test_encoder = EncoderRNN(self.data_train.state_size, self.hidden_size, device).to(device)
         test_attention = AttentionLayer(self.hidden_size, self.window_size, device).to(device)
-        test_decoder = Decoder(self.hidden_size, self.n_actions).to(device)
+        test_decoder = Decoder(self.hidden_size).to(device)
 
         self.test_net = Seq2Seq(test_encoder, test_attention, test_decoder)

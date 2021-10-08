@@ -32,6 +32,7 @@ class DataAutoPatternExtractionAgent(Data):
         self.data_kind = 'AutoPatternExtraction'
 
         self.data_preprocessed = data.loc[:, ['open_norm', 'high_norm', 'low_norm', 'close_norm']].values
+        self.state_mode = state_mode
 
         if state_mode == 1:  # OHLC
             self.state_size = 4

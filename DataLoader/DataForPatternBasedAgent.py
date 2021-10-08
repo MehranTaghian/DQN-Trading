@@ -21,6 +21,7 @@ class DataForPatternBasedAgent(Data):
 
         super().__init__(data, action_name, device, gamma, n_step, batch_size, transaction_cost=transaction_cost)
 
+
         self.data_kind = 'PatternBased'
 
         self.pattern_to_code = {}
