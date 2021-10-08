@@ -462,19 +462,19 @@ class SensitivityRun:
 
     def train(self):
         self.dqn_pattern.train(self.n_episodes)
-        self.dqn_vanilla.train(self.n_episodes)
-        self.dqn_candle_rep.train(self.n_episodes)
-        self.dqn_windowed.train(self.n_episodes)
-        self.mlp_pattern.train(self.n_episodes)
-        self.mlp_vanilla.train(self.n_episodes)
-        self.mlp_candle_rep.train(self.n_episodes)
-        self.mlp_windowed.train(self.n_episodes)
-        self.cnn1d.train(self.n_episodes)
-        self.cnn2d.train(self.n_episodes)
-        self.gru.train(self.n_episodes)
-        self.deep_cnn.train(self.n_episodes)
-        self.cnn_gru.train(self.n_episodes)
-        self.cnn_attn.train(self.n_episodes)
+        # self.dqn_vanilla.train(self.n_episodes)
+        # self.dqn_candle_rep.train(self.n_episodes)
+        # self.dqn_windowed.train(self.n_episodes)
+        # self.mlp_pattern.train(self.n_episodes)
+        # self.mlp_vanilla.train(self.n_episodes)
+        # self.mlp_candle_rep.train(self.n_episodes)
+        # self.mlp_windowed.train(self.n_episodes)
+        # self.cnn1d.train(self.n_episodes)
+        # self.cnn2d.train(self.n_episodes)
+        # self.gru.train(self.n_episodes)
+        # self.deep_cnn.train(self.n_episodes)
+        # self.cnn_gru.train(self.n_episodes)
+        # self.cnn_attn.train(self.n_episodes)
 
     def evaluate_sensitivity(self):
         key = None
@@ -486,21 +486,21 @@ class SensitivityRun:
             key = self.replay_memory_size
 
         self.test_portfolios[self.dqn_pattern.model_kind][key] = self.dqn_pattern.test().get_daily_portfolio_value()
-        self.test_portfolios[self.dqn_vanilla.model_kind][key] = self.dqn_vanilla.test().get_daily_portfolio_value()
-        self.test_portfolios[self.dqn_candle_rep.model_kind][
-            key] = self.dqn_candle_rep.test().get_daily_portfolio_value()
-        self.test_portfolios[self.dqn_windowed.model_kind][key] = self.dqn_windowed.test().get_daily_portfolio_value()
-        self.test_portfolios[self.mlp_pattern.model_kind][key] = self.mlp_pattern.test().get_daily_portfolio_value()
-        self.test_portfolios[self.mlp_vanilla.model_kind][key] = self.mlp_vanilla.test().get_daily_portfolio_value()
-        self.test_portfolios[self.mlp_candle_rep.model_kind][
-            key] = self.mlp_candle_rep.test().get_daily_portfolio_value()
-        self.test_portfolios[self.mlp_windowed.model_kind][key] = self.mlp_windowed.test().get_daily_portfolio_value()
-        self.test_portfolios[self.cnn1d.model_kind][key] = self.cnn1d.test().get_daily_portfolio_value()
-        self.test_portfolios[self.cnn2d.model_kind][key] = self.cnn2d.test().get_daily_portfolio_value()
-        self.test_portfolios[self.gru.model_kind][key] = self.gru.test().get_daily_portfolio_value()
-        self.test_portfolios[self.deep_cnn.model_kind][key] = self.deep_cnn.test().get_daily_portfolio_value()
-        self.test_portfolios[self.cnn_gru.model_kind][key] = self.cnn_gru.test().get_daily_portfolio_value()
-        self.test_portfolios[self.cnn_attn.model_kind][key] = self.cnn_attn.test().get_daily_portfolio_value()
+        # self.test_portfolios[self.dqn_vanilla.model_kind][key] = self.dqn_vanilla.test().get_daily_portfolio_value()
+        # self.test_portfolios[self.dqn_candle_rep.model_kind][
+        #     key] = self.dqn_candle_rep.test().get_daily_portfolio_value()
+        # self.test_portfolios[self.dqn_windowed.model_kind][key] = self.dqn_windowed.test().get_daily_portfolio_value()
+        # self.test_portfolios[self.mlp_pattern.model_kind][key] = self.mlp_pattern.test().get_daily_portfolio_value()
+        # self.test_portfolios[self.mlp_vanilla.model_kind][key] = self.mlp_vanilla.test().get_daily_portfolio_value()
+        # self.test_portfolios[self.mlp_candle_rep.model_kind][
+        #     key] = self.mlp_candle_rep.test().get_daily_portfolio_value()
+        # self.test_portfolios[self.mlp_windowed.model_kind][key] = self.mlp_windowed.test().get_daily_portfolio_value()
+        # self.test_portfolios[self.cnn1d.model_kind][key] = self.cnn1d.test().get_daily_portfolio_value()
+        # self.test_portfolios[self.cnn2d.model_kind][key] = self.cnn2d.test().get_daily_portfolio_value()
+        # self.test_portfolios[self.gru.model_kind][key] = self.gru.test().get_daily_portfolio_value()
+        # self.test_portfolios[self.deep_cnn.model_kind][key] = self.deep_cnn.test().get_daily_portfolio_value()
+        # self.test_portfolios[self.cnn_gru.model_kind][key] = self.cnn_gru.test().get_daily_portfolio_value()
+        # self.test_portfolios[self.cnn_attn.model_kind][key] = self.cnn_attn.test().get_daily_portfolio_value()
 
     def plot_and_save_sensitivity(self):
         plot_path = os.path.join(self.experiment_path, 'plots')
@@ -519,7 +519,10 @@ class SensitivityRun:
                     self.test_portfolios[model_name][gamma][0] * 100
                     for i in range(len(self.test_portfolios[model_name][gamma]))]
 
-                difference = len(self.test_portfolios[model_name]) - len(self.data_loader.data_test_with_date)
+                difference = len(self.test_portfolios[model_name][gamma]) - len(self.data_loader.data_test_with_date)
+                print(len(profit_percentage))
+                print(len(self.test_portfolios[model_name][gamma]))
+                print(len(self.data_loader.data_test_with_date))
                 df = pd.DataFrame({'date': self.data_loader.data_test_with_date.index,
                                    'portfolio': profit_percentage[difference:]})
                 if not first:
