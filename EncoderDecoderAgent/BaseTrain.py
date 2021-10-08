@@ -44,7 +44,6 @@ class BaseTrain:
         @param TARGET_UPDATE: hard update policy network into target network every TARGET_UPDATE iterations
         @param n_step: for using in the name of the result file
         """
-        print(model_kind)
         self.data_train = data_train
         self.data_test = data_test
         self.DATASET_NAME = dataset_name
@@ -172,6 +171,7 @@ class BaseTrain:
         return loss
 
     def train(self, num_episodes=50, tensorboard=None):
+        print('Training', self.model_kind, '...')
         for i_episode in tqdm(range(num_episodes)):
             # Initialize the environment and state
             total_loss = 0

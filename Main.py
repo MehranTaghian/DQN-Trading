@@ -27,8 +27,10 @@ from utils import save_pkl, load_pkl
 parser = argparse.ArgumentParser(description='DQN-Trader arguments')
 parser.add_argument('--dataset-name', default="BTC-USD",
                     help='Name of the data inside the Data folder')
-parser.add_argument('--models', help="Enter the name of the models you want to do HP sensitivity. The names should be"
-                                     "separated using space.E.g. 'MLP DRL CNN'")
+parser.add_argument('--nep', type=int, default=30,
+                    help='Number of episodes')
+parser.add_argument('--window_size', type=int, default=3,
+                    help='Window size for sequential models')
 parser.add_argument('--cuda', action="store_true",
                     help='run on CUDA (default: False)')
 args = parser.parse_args()
@@ -546,12 +548,12 @@ if __name__ == '__main__':
     batch_size_list = [16, 64, 256]
     replay_memory_size_list = [16, 64, 256]
     n_step = 8
-    window_size = 3  # Default value for the experiments of the first paper.
+    window_size = args.window_size
     dataset_name = args.dataset_name
-    device = torch.device("cuda" if torch.cuda.is_available() and args.cuda else "cpu")
+    n_episodes = args.nep
+    device = torch.device("cuda" if args.cuda and torch.cuda.is_available() else "cpu")
     feature_size = 64
     target_update = 5
-    n_episodes = 30
 
     gamma_default = 0.9
     batch_size_default = 16
