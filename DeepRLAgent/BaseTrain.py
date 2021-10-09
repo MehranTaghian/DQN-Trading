@@ -228,6 +228,6 @@ class BaseTrain:
 
         data.make_investment(action_list)
         ev_agent = Evaluation(data.data, data.action_name, initial_investment, self.transaction_cost)
-        print(test_type)
-        ev_agent.evaluate()
+        # print(test_type)
+        # ev_agent.evaluate()
         return ev_agent

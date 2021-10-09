@@ -165,12 +165,20 @@ class SensitivityRun:
             os.makedirs(self.experiment_path)
 
         self.reset()
-        self.test_portfolios = {self.dqn_pattern.model_kind: {}, self.dqn_vanilla.model_kind: {},
-                                self.dqn_candle_rep.model_kind: {}, self.dqn_windowed.model_kind: {},
-                                self.mlp_pattern.model_kind: {}, self.mlp_vanilla.model_kind: {},
-                                self.mlp_candle_rep.model_kind: {}, self.mlp_windowed.model_kind: {},
-                                self.cnn1d.model_kind: {}, self.cnn2d.model_kind: {}, self.gru.model_kind: {},
-                                self.deep_cnn.model_kind: {}, self.cnn_gru.model_kind: {}, self.cnn_attn.model_kind: {}}
+        self.test_portfolios = {'DQN-pattern': {},
+                                'DQN-vanilla': {},
+                                'DQN-candlerep': {},
+                                'DQN-windowed': {},
+                                'MLP-pattern': {},
+                                'MLP-vanilla': {},
+                                'MLP-candlerep': {},
+                                'MLP-windowed': {},
+                                'CNN1d': {},
+                                'CNN2d': {},
+                                'GRU': {},
+                                'Deep-CNN': {},
+                                'CNN-GRU': {},
+                                'CNN-ATTN': {}}
 
     def reset(self):
         self.load_data()
@@ -462,19 +470,19 @@ class SensitivityRun:
 
     def train(self):
         self.dqn_pattern.train(self.n_episodes)
-        # self.dqn_vanilla.train(self.n_episodes)
-        # self.dqn_candle_rep.train(self.n_episodes)
-        # self.dqn_windowed.train(self.n_episodes)
-        # self.mlp_pattern.train(self.n_episodes)
-        # self.mlp_vanilla.train(self.n_episodes)
-        # self.mlp_candle_rep.train(self.n_episodes)
-        # self.mlp_windowed.train(self.n_episodes)
-        # self.cnn1d.train(self.n_episodes)
-        # self.cnn2d.train(self.n_episodes)
-        # self.gru.train(self.n_episodes)
-        # self.deep_cnn.train(self.n_episodes)
-        # self.cnn_gru.train(self.n_episodes)
-        # self.cnn_attn.train(self.n_episodes)
+        self.dqn_vanilla.train(self.n_episodes)
+        self.dqn_candle_rep.train(self.n_episodes)
+        self.dqn_windowed.train(self.n_episodes)
+        self.mlp_pattern.train(self.n_episodes)
+        self.mlp_vanilla.train(self.n_episodes)
+        self.mlp_candle_rep.train(self.n_episodes)
+        self.mlp_windowed.train(self.n_episodes)
+        self.cnn1d.train(self.n_episodes)
+        self.cnn2d.train(self.n_episodes)
+        self.gru.train(self.n_episodes)
+        self.deep_cnn.train(self.n_episodes)
+        self.cnn_gru.train(self.n_episodes)
+        self.cnn_attn.train(self.n_episodes)
 
     def evaluate_sensitivity(self):
         key = None
@@ -485,22 +493,22 @@ class SensitivityRun:
         elif self.evaluation_parameter == 'replay memory size':
             key = self.replay_memory_size
 
-        self.test_portfolios[self.dqn_pattern.model_kind][key] = self.dqn_pattern.test().get_daily_portfolio_value()
-        # self.test_portfolios[self.dqn_vanilla.model_kind][key] = self.dqn_vanilla.test().get_daily_portfolio_value()
-        # self.test_portfolios[self.dqn_candle_rep.model_kind][
-        #     key] = self.dqn_candle_rep.test().get_daily_portfolio_value()
-        # self.test_portfolios[self.dqn_windowed.model_kind][key] = self.dqn_windowed.test().get_daily_portfolio_value()
-        # self.test_portfolios[self.mlp_pattern.model_kind][key] = self.mlp_pattern.test().get_daily_portfolio_value()
-        # self.test_portfolios[self.mlp_vanilla.model_kind][key] = self.mlp_vanilla.test().get_daily_portfolio_value()
-        # self.test_portfolios[self.mlp_candle_rep.model_kind][
-        #     key] = self.mlp_candle_rep.test().get_daily_portfolio_value()
-        # self.test_portfolios[self.mlp_windowed.model_kind][key] = self.mlp_windowed.test().get_daily_portfolio_value()
-        # self.test_portfolios[self.cnn1d.model_kind][key] = self.cnn1d.test().get_daily_portfolio_value()
-        # self.test_portfolios[self.cnn2d.model_kind][key] = self.cnn2d.test().get_daily_portfolio_value()
-        # self.test_portfolios[self.gru.model_kind][key] = self.gru.test().get_daily_portfolio_value()
-        # self.test_portfolios[self.deep_cnn.model_kind][key] = self.deep_cnn.test().get_daily_portfolio_value()
-        # self.test_portfolios[self.cnn_gru.model_kind][key] = self.cnn_gru.test().get_daily_portfolio_value()
-        # self.test_portfolios[self.cnn_attn.model_kind][key] = self.cnn_attn.test().get_daily_portfolio_value()
+        self.test_portfolios['DQN-pattern'][key] = self.dqn_pattern.test().get_daily_portfolio_value()
+        self.test_portfolios['DQN-vanilla'][key] = self.dqn_vanilla.test().get_daily_portfolio_value()
+        self.test_portfolios['DQN-candlerep'][
+            key] = self.dqn_candle_rep.test().get_daily_portfolio_value()
+        self.test_portfolios['DQN-windowed'][key] = self.dqn_windowed.test().get_daily_portfolio_value()
+        self.test_portfolios['MLP-pattern'][key] = self.mlp_pattern.test().get_daily_portfolio_value()
+        self.test_portfolios['MLP-vanilla'][key] = self.mlp_vanilla.test().get_daily_portfolio_value()
+        self.test_portfolios['MLP-candlerep'][
+            key] = self.mlp_candle_rep.test().get_daily_portfolio_value()
+        self.test_portfolios['MLP-windowed'][key] = self.mlp_windowed.test().get_daily_portfolio_value()
+        self.test_portfolios['CNN1d'][key] = self.cnn1d.test().get_daily_portfolio_value()
+        self.test_portfolios['CNN2d'][key] = self.cnn2d.test().get_daily_portfolio_value()
+        self.test_portfolios['GRU'][key] = self.gru.test().get_daily_portfolio_value()
+        self.test_portfolios['Deep-CNN'][key] = self.deep_cnn.test().get_daily_portfolio_value()
+        self.test_portfolios['CNN-GRU'][key] = self.cnn_gru.test().get_daily_portfolio_value()
+        self.test_portfolios['CNN-ATTN'][key] = self.cnn_attn.test().get_daily_portfolio_value()
 
     def plot_and_save_sensitivity(self):
         plot_path = os.path.join(self.experiment_path, 'plots')
@@ -520,9 +528,6 @@ class SensitivityRun:
                     for i in range(len(self.test_portfolios[model_name][gamma]))]
 
                 difference = len(self.test_portfolios[model_name][gamma]) - len(self.data_loader.data_test_with_date)
-                print(len(profit_percentage))
-                print(len(self.test_portfolios[model_name][gamma]))
-                print(len(self.data_loader.data_test_with_date))
                 df = pd.DataFrame({'date': self.data_loader.data_test_with_date.index,
                                    'portfolio': profit_percentage[difference:]})
                 if not first:
@@ -534,7 +539,7 @@ class SensitivityRun:
             ax.set(xlabel='Time', ylabel='%Rate of Return')
             ax.set_title(f'Analyzing the sensitivity of {model_name} to {self.evaluation_parameter}')
             plt.legend()
-            fig_file = os.path.join(plot_path, model_name + '.jpg')
+            fig_file = os.path.join(plot_path, f'{model_name}.jpg')
             plt.savefig(fig_file, dpi=300)
 
     def save_portfolios(self):
@@ -568,7 +573,7 @@ if __name__ == '__main__':
 
     run = SensitivityRun(
         dataset_name,
-        gamma_list[0],
+        gamma_default,
         batch_size_default,
         replay_memory_size_default,
         feature_size,
@@ -580,12 +585,12 @@ if __name__ == '__main__':
         evaluation_parameter='gamma',
         transaction_cost=0)
 
-    for gamma in gamma_list[1:]:
+    for gamma in gamma_list:
+        run.gamma = gamma
+        run.reset()
         run.train()
         run.evaluate_sensitivity()
         pbar.update(1)
-        run.gamma = gamma
-        run.reset()
 
     run.save_experiment()
 
@@ -593,7 +598,7 @@ if __name__ == '__main__':
     run = SensitivityRun(
         dataset_name,
         gamma_default,
-        batch_size_list[0],
+        batch_size_default,
         replay_memory_size_default,
         feature_size,
         target_update,
@@ -604,12 +609,12 @@ if __name__ == '__main__':
         evaluation_parameter='batch size',
         transaction_cost=0)
 
-    for batch_size in batch_size_list[1:]:
+    for batch_size in batch_size_list:
+        run.batch_size = batch_size
+        run.reset()
         run.train()
         run.evaluate_sensitivity()
         pbar.update(1)
-        run.batch_size = batch_size
-        run.reset()
 
     run.save_experiment()
 
@@ -618,7 +623,7 @@ if __name__ == '__main__':
         dataset_name,
         gamma_default,
         batch_size_default,
-        replay_memory_size_list[0],
+        replay_memory_size_default,
         feature_size,
         target_update,
         n_episodes,
@@ -628,13 +633,12 @@ if __name__ == '__main__':
         evaluation_parameter='replay memory size',
         transaction_cost=0)
 
-    for replay_memory_size in replay_memory_size_list[1:]:
+    for replay_memory_size in replay_memory_size_list:
+        run.replay_memory_size = replay_memory_size
+        run.reset()
         run.train()
         run.evaluate_sensitivity()
         pbar.update(1)
-        run.replay_memory_size = replay_memory_size
-        run.reset()
 
     run.save_experiment()
-
     pbar.close()
