@@ -1,7 +1,0 @@
-1) change the result output format
-2) plots
-3) if-statement for running which algorithms
-4) loading dataset
-5) Separate action names for data
-6) test portfolios and plot results
-7) save portfolios and plots in a separate directory for each experiment
